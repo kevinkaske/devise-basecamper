@@ -4,7 +4,7 @@ module Devise
       module ClassMethods
         def find_for_authentication(conditions={})
           conditions.delete(:subdomain)
-          find_first_by_auth_conditions(conditions)
+          where(conditions).where(["account_id in (select account_id from accounts where subdomain = :value)", { :value => request.subdomains.first }]).first
         end
       end
     end
